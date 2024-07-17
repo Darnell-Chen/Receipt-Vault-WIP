@@ -1,42 +1,88 @@
 import { SafeAreaView, Text, TextInput, StyleSheet, Button, View, Pressable,
-    Keyboard, TouchableWithoutFeedback
+    Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform
  } from "react-native";
-import {Formik} from "formik";
-
-
+import { Formik } from "formik";
+import { registrationSchema } from "./validation";
 
 function registrationPage() {
 
+    const registerUser = async(value: Object) => {
+        console.log(JSON.stringify(value));
+        const result = await fetch(process.env.REACT_APP_IP + ':3001/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(value)
+        })
+
+        console.log(result.status);
+    }
+
+    
     
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            
-            <SafeAreaView>
+            <KeyboardAvoidingView 
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.keyboardContainer}>
 
-                    <Text style={styles.registerStyle}>
-                        Registration
-                    </Text>
-
+            <SafeAreaView style={styles.safeArea}>
 
                     <Formik
-                        initialValues={{ fname: '', lname: '', email: '', password: '', password2: ''}}
-                        onSubmit={((values, actions) => {
-                            console.log(values);
+                        initialValues={{ fname: '', lname: '', email: '', password: '', confirmPassword: ''}}
+                        validationSchema={registrationSchema}
+                        onSubmit={(values, actions) => {
                             // actions.resetForm();
+                            console.log("successfully passed validation");
+                            registerUser(values);
 
-                        })}>
+                        }}>
 
                         {(props) => (
                             <View style={styles.formStyle}>
-                                <TextInput placeholder="First Name" style={{...styles.defaultInput, marginVertical: 4}} onChangeText={props.handleChange('fname')} value={props.values.fname}/>
-                                <TextInput placeholder="Last Name" style={{...styles.defaultInput, marginVertical: 4}} onChangeText={props.handleChange('lname')} value={props.values.lname}/>
+                                <TextInput placeholder="First Name" 
+                                    style={{...styles.defaultInput, marginVertical: 4}} 
+                                    onChangeText={props.handleChange('fname')} 
+                                    onBlur={props.handleBlur('fname')}
+                                    value={props.values.fname}/>
+                                <Text style={styles.errorText}> {props.touched.fname && props.errors.fname } </Text>
 
-                                <TextInput placeholder="Email" style={styles.defaultInput} onChangeText={props.handleChange('email')} value={props.values.email}/>
 
-                                <TextInput placeholder="Password" style={{...styles.defaultInput, marginVertical: 4}} onChangeText={props.handleChange('password')} value={props.values.password}/>
-                                <TextInput placeholder="Re-Enter Password" style={{...styles.defaultInput, marginVertical: 4}} onChangeText={props.handleChange('password2')} value={props.values.password2}/>
+                                <TextInput placeholder="Last Name" 
+                                    style={{...styles.defaultInput, marginVertical: 4}} 
+                                    onChangeText={props.handleChange('lname')}
+                                    onBlur={props.handleBlur('lname')} 
+                                    value={props.values.lname}/>
+                                <Text style={styles.errorText}> {props.touched.lname && props.errors.lname } </Text>
 
-                                <Pressable style={{backgroundColor: 'green', marginHorizontal: '25%', marginTop: '5%'}}>
+
+
+                                <TextInput placeholder="Email" 
+                                    style={styles.defaultInput} 
+                                    onChangeText={props.handleChange('email')} 
+                                    onBlur={props.handleBlur('email')}
+                                    value={props.values.email}/>
+                                <Text style={styles.errorText}> {props.touched.email && props.errors.email } </Text>
+
+
+
+                                <TextInput placeholder="Password" 
+                                    style={{...styles.defaultInput, marginVertical: 4}} 
+                                    onChangeText={props.handleChange('password')} 
+                                    onBlur={props.handleBlur('password')}
+                                    value={props.values.password}/>
+                                <Text style={styles.errorText}> {props.touched.password && props.errors.password } </Text>
+                                
+                                <TextInput placeholder="Confirm Password" 
+                                    style={{...styles.defaultInput, marginVertical: 4}} 
+                                    onChangeText={props.handleChange('confirmPassword')} 
+                                    onBlur={props.handleBlur('confirmPassword')}
+                                    value={props.values.confirmPassword}/>
+                                <Text style={styles.errorText}> {props.touched.confirmPassword && props.errors.confirmPassword } </Text>
+                                
+
+                                <Pressable style={{backgroundColor: 'green', marginHorizontal: '25%', marginTop: '5%', bottom: '0%'}}>
                                     <Button onPress={() => props.handleSubmit()} color="white" title="Register" />
                                 </Pressable>
                             </View>
@@ -46,28 +92,33 @@ function registrationPage() {
 
             </SafeAreaView>
 
+            </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     )
 }
 
 const styles = StyleSheet.create({
-    defaultInput: {
-        fontSize: 20,
-        borderWidth: 1,
-        marginVertical: 12,
-        padding: 12,
-        borderColor: 'lightgrey'
+    keyboardContainer: {
+        flex: 1
     },
-    registerStyle: {
-        color: 'green',
-        fontSize: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: '20%'
+    safeArea: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 12,
+        backgroundColor: 'white',
+    },
+    defaultInput: {
+        borderWidth: 1,
+        padding: 12,
+        borderColor: 'lightgrey',
     },
     formStyle: {
-        marginHorizontal: 12,
-        marginVertical: '5%'
+        width: '100%',
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 15,
     }
 })
 

@@ -12,15 +12,16 @@ const connectToPool = async () => {
         });
 
         try {
-            await connection.query('CREATE DATABASE IF NOT EXISTS rv_accounts');
+            await connection.query('CREATE DATABASE IF NOT EXISTS receipt_vault');
+            connection.end()
         } catch {
-            console.log("Problem creating DB or Tables");
+            console.log("Problem creating DB");
         }
 
         pool = mysql.createPool({
             host: 'localhost',
             user: 'root',
-            database: 'rv_accounts',
+            database: 'receipt_vault',
             password: process.env.MYSQL_PASSWORD,
             waitForConnections: true,
             connectionLimit: 10,
@@ -31,16 +32,31 @@ const connectToPool = async () => {
             keepAliveInitialDelay: 0,
           });
 
-        // we'll instantiate initial DB
+        // we'll instantiate initial tables
+        await createTables();
     }
     return pool;
 }
 
 
 const createTables = async () => {
-    const connection = await pool.query(
-        
-    );
+    try {
+        const makeAccountsTBL = `  
+        CREATE TABLE IF NOT EXISTS \`accounts\` (
+        uuid CHAR(36) NOT NULL PRIMARY KEY,
+        firstname VARCHAR(255) NOT NULL,
+        lastname VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL
+        );
+    `;
+
+    const [rows, fields] = await pool.query(makeAccountsTBL);
+    console.log('Table created successfully');
+
+    } catch (e) {
+        console.log("Problems occured while creating initial tables");
+    }
 }
 
 module.exports = connectToPool;

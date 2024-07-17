@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 
-const createAccount = require("./routes/createAccount");
+const register = require("./routes/register");
 
 const app = express();
 const port = 3001;
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 const poolConnection = require("./db");
 
@@ -29,4 +31,4 @@ const startPool = async () => {
 
 startPool();
 
-app.use(createAccount);
+app.use(register);
