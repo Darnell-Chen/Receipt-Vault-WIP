@@ -52,7 +52,7 @@ const createTables = async () => {
     `;
 
     const [rows, fields] = await pool.query(makeAccountsTBL);
-    console.log('Table created successfully');
+    console.log('DB ready');
 
     } catch (e) {
         console.log("Problems occured while creating initial tables");

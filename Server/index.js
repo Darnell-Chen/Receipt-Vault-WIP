@@ -30,5 +30,4 @@ const startPool = async () => {
 }
 
 startPool();
-
 app.use(register);
