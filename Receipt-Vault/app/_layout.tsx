@@ -9,12 +9,16 @@ export default function RootLayout() {
         headerTintColor: 'green',
       }}>
 
-        <Stack.Screen name="index" options={{
-          headerShown: false,
-        }}/>
+      <Stack.Screen name="index" options={{
+        headerShown: false,
+      }}/>
 
       <Stack.Screen name="InitialPage/registration" options={{
         headerTitle: 'Registration'
+      }}/>
+
+      <Stack.Screen name="Dashboard/Dashboard" options={{
+        headerTitle: 'Dashboard'
       }}/>
       
     </Stack>

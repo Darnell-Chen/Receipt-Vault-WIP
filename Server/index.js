@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const register = require("./routes/register");
+const login = require("./routes/login");
 
 const app = express();
 const port = 3001;
@@ -31,3 +32,4 @@ const startPool = async () => {
 
 startPool();
 app.use(register);
+app.use(login);

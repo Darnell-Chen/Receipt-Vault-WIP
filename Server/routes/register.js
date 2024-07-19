@@ -21,7 +21,8 @@ const checkUserRegistered = async (req, res, next) => {
     conn.release();
 
     if (rows.length !== 0) {
-        return res.sendStatus(400);
+        res.sendStatus(400);
+        return;
     }
 
     next();
@@ -41,7 +42,7 @@ const registerUser = async (req) => {
     try {
         const [rows, fields] = await conn.execute(createUser, [uuid, fname, lname, email, hashedPW]);
     } catch (e){
-        console.log(`duplicate account, ${email} already registered`);
+        console.log(e);
         return false;
     }
 

@@ -1,6 +1,52 @@
 import { Link } from "expo-router";
 import { Text, Button, View, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Pressable, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { Formik } from "formik";
+import {loginSchema} from "./InitialPage/validation";
+import { useState } from "react";
+import { router } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
+
+import {FETCH_URL} from "@env";
+
+
 function Index() {
+  const [loginMsg, setLoginMsg] = useState<string | null>(null);
+
+
+
+  const loginFunction = async (value: object) => {
+    const result = await fetch(`${process.env.FETCH_URL}:3001/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(value),
+    })
+
+    if (!result) {
+      setLoginMsg("server error");
+      return;
+    }
+
+    if (!result.ok) {
+      setLoginMsg("Make sure all inputs are correct");
+    }
+
+    const token = await result.json();
+
+    try {
+      console.log(token.token);
+      await SecureStore.setItemAsync("token", token.token);
+      router.replace("./Dashboard/Dashboard");
+    } catch (error) {
+      console.log("error storing token to secure storage");
+      setLoginMsg("Client Error with Token");
+      return;
+    }
+  }
+
+
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
@@ -12,19 +58,44 @@ function Index() {
           <Text style={styles.phrase}>Keep Track of your Expenses 24/7</Text>
 
 
-          <TextInput style={styles.loginInput} placeholder="Username"/>
-          <TextInput style={styles.loginInput} placeholder="Password"/>
-          
-          <Pressable>
-            <Link style={{textAlign: 'right', color: 'green'}} href="./InitialPage/registration">
-              Need to Register?
-            </Link>
-          </Pressable>
-        </View>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            onSubmit={(values) => (loginFunction(values))}
+            validationSchema={loginSchema}
+            >
+            {(props) => (
+              <View>
+                <TextInput placeholder="Email"
+                  style={styles.loginInput} 
+                  onChangeText={props.handleChange('email')}
+                  onBlur={props.handleBlur('email')}
+                  value={props.values.email}
+                />
 
-        <TouchableOpacity style={styles.loginButton}>
-          <Button title="Login" color="white"/>
-        </TouchableOpacity>
+                <TextInput placeholder="Password"
+                  style={styles.loginInput} 
+                  onChangeText={props.handleChange('password')}
+                  onBlur={props.handleBlur('password')}
+                  value={props.values.password}
+                />
+
+                <Link style={{textAlign: 'right', color: 'green', marginTop: 12}} href="./InitialPage/registration">
+                  Need to Register?
+                </Link>
+
+                <Text style={styles.errorText}> {props.touched.email && props.errors.email && "Make sure all inputs are correct" } </Text>
+                <Text style={styles.errorText}> {!(props.errors.email) && props.touched.password && props.errors.password && "Make sure all inputs are correct"} </Text>
+                <Text style={styles.errorText}> {!(props.errors.email) && !(props.errors.password) && loginMsg} </Text>
+
+
+                <TouchableOpacity style={styles.loginButton}>
+                  <Button title="Login" color="white" onPress={() => props.handleSubmit()}/>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+        
+        </View>
       </SafeAreaView>
 
       </View>
@@ -56,7 +127,7 @@ const styles = StyleSheet.create({
     },
     loginInput: {
       height: 40,
-      marginVertical: 12,
+      marginTop: 12,
       borderWidth: 1,
       padding: 10,
       borderColor: 'lightgray',
@@ -66,6 +137,10 @@ const styles = StyleSheet.create({
       marginHorizontal: '25%',
       marginTop: 10,
     },
+    errorText: {
+      color: 'red',
+      fontSize: 15,
+    }
 });
 
 export default Index;
