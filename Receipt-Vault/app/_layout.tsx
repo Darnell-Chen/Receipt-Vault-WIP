@@ -5,7 +5,7 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        headerTransparent: true,
+        headerTransparent: false,
         headerTintColor: 'green',
       }}>
 
@@ -17,8 +17,8 @@ export default function RootLayout() {
         headerTitle: 'Registration'
       }}/>
 
-      <Stack.Screen name="Dashboard/Dashboard" options={{
-        headerTitle: 'Dashboard'
+      <Stack.Screen name="Active" options={{
+        headerShown: false
       }}/>
       
     </Stack>

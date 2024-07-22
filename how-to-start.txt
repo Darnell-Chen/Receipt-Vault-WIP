@@ -3,4 +3,4 @@ https://docs.expo.dev/get-started/start-developing/
 cd Receipt-Vault
 npx expo start
 
-Note: App.js is instead ./app/tabs/indesx.tsx
+Note: App.js is instead ./app/tabs/index.tsx

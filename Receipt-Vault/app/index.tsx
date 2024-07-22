@@ -1,18 +1,19 @@
 import { Link } from "expo-router";
 import { Text, Button, View, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Pressable, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Formik } from "formik";
-import {loginSchema} from "./InitialPage/validation";
+import { loginSchema } from "./InitialPage/validation";
 import { useState } from "react";
-import { router } from "expo-router";
+import { router, Redirect } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 
-import {FETCH_URL} from "@env";
+import { FETCH_URL } from "@env";
 
 
 function Index() {
+
+  return (<Redirect href="/Active"/>)
+
   const [loginMsg, setLoginMsg] = useState<string | null>(null);
-
-
 
   const loginFunction = async (value: object) => {
     const result = await fetch(`${process.env.FETCH_URL}:3001/login`, {
@@ -37,7 +38,7 @@ function Index() {
     try {
       console.log(token.token);
       await SecureStore.setItemAsync("token", token.token);
-      router.replace("./Dashboard/Dashboard");
+      router.replace("/Active");
     } catch (error) {
       console.log("error storing token to secure storage");
       setLoginMsg("Client Error with Token");

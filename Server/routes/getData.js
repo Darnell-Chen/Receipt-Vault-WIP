@@ -7,8 +7,7 @@ const route = express.Router();
 
 let pool;
 
-route.get("/getData", function(req, res) {
-    console.log(req.headers);
+route.get("/getData", verifyToken, function(req, res) {
     res.sendStatus(200);
     return;
 })
