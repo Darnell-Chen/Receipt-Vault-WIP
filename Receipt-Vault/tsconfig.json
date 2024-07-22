@@ -5,7 +5,8 @@
     "baseUrl": ".", // This must be specified if "paths" is.
     "paths": {
       "@apps/*": ["app/*"],
-      "@globals/*": ["globals/*"]
+      "@globals/*": ["globals/*"],
+      "@components/*": ["components/*"]
     }
   },
   "include": [

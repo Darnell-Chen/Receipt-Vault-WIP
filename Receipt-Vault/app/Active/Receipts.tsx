@@ -1,6 +1,7 @@
 import {Text, SafeAreaView, Button, FlatList, View, StyleSheet} from "react-native";
 import { router } from "expo-router";
 import colors from '@globals/colors';
+import ImagePickerButton from "../../components/_receiptComp/imagePicker";
 
 
 function Receipts(){
@@ -17,7 +18,8 @@ function Receipts(){
                     <Button color="white" title="Scan Receipt"/>
                 </View>
                 <View style={styles.buttons}>
-                    <Button color="white" title="Enter Manual Bill"/>
+                    {/* <Button color="white" title="Enter Manual Bill"/> */}
+                    <ImagePickerButton/>
                 </View>
             </View>
 
