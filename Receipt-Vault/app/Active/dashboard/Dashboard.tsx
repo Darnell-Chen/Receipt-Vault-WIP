@@ -21,7 +21,7 @@ function Dashboard() {
             }
         })
 
-        console.log(result);
+        console.log(result.status);
     }
 
     return(

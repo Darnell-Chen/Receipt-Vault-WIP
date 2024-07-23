@@ -1,7 +1,7 @@
 import {Text, SafeAreaView, Button, FlatList, View, StyleSheet} from "react-native";
 import { router } from "expo-router";
 import colors from '@globals/colors';
-import ImagePickerButton from "../../components/_receiptComp/imagePicker";
+import ImagePickerButton from "../../components/receipt_components/imagePicker";
 
 
 function Receipts(){

@@ -4,14 +4,12 @@ import { SafeAreaView, Text, TextInput, StyleSheet, Button, View, Pressable,
 import { Formik } from "formik";
 import { registrationSchema } from "./validation";
 
-import {FETCH_URL} from "@env";
-
 
 function registrationPage() {
 
     const registerUser = async(value: Object) => {
 
-        const result = await fetch(`${process.env.FETCH_URL}:3001/register`, {
+        const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

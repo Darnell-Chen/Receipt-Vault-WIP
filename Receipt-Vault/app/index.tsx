@@ -6,8 +6,6 @@ import { useState } from "react";
 import { router, Redirect } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 
-import { FETCH_URL } from "@env";
-
 
 function Index() {
 
@@ -16,7 +14,7 @@ function Index() {
   const [loginMsg, setLoginMsg] = useState<string | null>(null);
 
   const loginFunction = async (value: object) => {
-    const result = await fetch(`${process.env.FETCH_URL}:3001/login`, {
+    const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

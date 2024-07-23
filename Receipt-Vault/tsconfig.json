@@ -6,7 +6,8 @@
     "paths": {
       "@apps/*": ["app/*"],
       "@globals/*": ["globals/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@env": ["node_modules/react-native-dotenv"]
     }
   },
   "include": [

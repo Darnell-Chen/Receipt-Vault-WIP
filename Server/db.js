@@ -42,17 +42,29 @@ const connectToPool = async () => {
 const createTables = async () => {
     try {
         const makeAccountsTBL = `  
-        CREATE TABLE IF NOT EXISTS \`accounts\` (
+        CREATE TABLE IF NOT EXISTS accounts (
         uuid CHAR(36) NOT NULL PRIMARY KEY,
         firstname VARCHAR(255) NOT NULL,
         lastname VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL
         );
-    `;
+        `;
 
-    const [rows, fields] = await pool.query(makeAccountsTBL);
-    console.log('DB ready');
+        const makeReceiptsTBL = `
+        CREATE TABLE IF NOT EXISTS receipts (
+        receiptID CHAR(36) NOT NULL PRIMARY KEY,
+        store VARCHAR(69) NOT NULL,
+        items JSON NOT NULL,
+        total INT NOT NULL,
+        buyer CHAR(36) NOT NULL,
+        FOREIGN KEY (buyer) REFERENCES accounts(uuid)
+        );`
+
+        const [accountRows, accountFields] = await pool.query(makeAccountsTBL);
+        const [receiptRows, receiptFields] = await pool.query(makeReceiptsTBL);
+
+        console.log('DB ready');
 
     } catch (e) {
         console.log("Problems occured while creating initial tables");
