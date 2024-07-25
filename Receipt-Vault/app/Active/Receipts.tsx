@@ -7,8 +7,10 @@ import ImagePickerButton from "../../components/receipt_components/imagePicker";
 function Receipts(){
     return (
         <>
-        <View style={{backgroundColor: colors.color1, minHeight: '12.5%', borderRadius: 30, display: 'flex', justifyContent: 'flex-end'}}>
-                    <Text style={styles.title}>The Receipt Vault</Text>
+        <View style={{backgroundColor: colors.color1, borderRadius: 30, display: 'flex', justifyContent: 'flex-end'}}>
+            <SafeAreaView>
+            <Text style={styles.title}>The Receipt Vault</Text>
+            </SafeAreaView>
         </View>
 
         <View style={styles.centerConsole}>

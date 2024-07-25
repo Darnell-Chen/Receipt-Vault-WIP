@@ -7,7 +7,7 @@
       "@apps/*": ["app/*"],
       "@globals/*": ["globals/*"],
       "@components/*": ["components/*"],
-      "@env": ["node_modules/react-native-dotenv"]
+      "@images/*": ["images/*"],
     }
   },
   "include": [

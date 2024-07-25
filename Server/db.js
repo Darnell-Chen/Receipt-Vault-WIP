@@ -43,22 +43,24 @@ const createTables = async () => {
     try {
         const makeAccountsTBL = `  
         CREATE TABLE IF NOT EXISTS accounts (
-        uuid CHAR(36) NOT NULL PRIMARY KEY,
-        firstname VARCHAR(255) NOT NULL,
-        lastname VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
+            uuid CHAR(36) NOT NULL,
+            firstname VARCHAR(255) NOT NULL,
+            lastname VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            PRIMARY KEY (uuid)
         );
         `;
 
         const makeReceiptsTBL = `
         CREATE TABLE IF NOT EXISTS receipts (
-        receiptID CHAR(36) NOT NULL PRIMARY KEY,
-        store VARCHAR(69) NOT NULL,
-        items JSON NOT NULL,
-        total INT NOT NULL,
-        buyer CHAR(36) NOT NULL,
-        FOREIGN KEY (buyer) REFERENCES accounts(uuid)
+            receiptID INT NOT NULL AUTO_INCREMENT,
+            store VARCHAR(69) NOT NULL,
+            items JSON NOT NULL,
+            total INT NOT NULL,
+            buyer CHAR(36) NOT NULL,
+            PRIMARY KEY (receiptID),
+            FOREIGN KEY (buyer) REFERENCES accounts(uuid)
         );`
 
         const [accountRows, accountFields] = await pool.query(makeAccountsTBL);

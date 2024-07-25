@@ -32,7 +32,7 @@ route.post("/login", async function(req, res) {
     }
 
     if (rows.length > 1 || rows.length < 1) {
-        res.sendStatus(404);
+        res.sendStatus(400);
         return;
     }
 
@@ -45,7 +45,7 @@ route.post("/login", async function(req, res) {
     }
 
     // better to be safe than sorry
-    res.sendStatus(404);
+    res.sendStatus(400);
     return;
 })
 

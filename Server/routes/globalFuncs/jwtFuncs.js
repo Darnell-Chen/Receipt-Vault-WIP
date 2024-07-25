@@ -12,20 +12,20 @@ function createToken(email) {
 }
 
 function verifyToken(req, res, next) {
-    let decoded;
-
     try {
-        console.log("req headers : " + req.headers);
-        let token = req.headers.Authorization;
+        const token = req.headers.authorization;
+        const parsedToken = token.split(" ")[1];
 
-        decoded = jwt.verify(token, process.env.JWT_SECRET);
+        decoded = jwt.verify(parsedToken, process.env.JWT_SECRET);
+
+        req.user = decoded.email;
+        next();
     } catch(err) {
-        console.log(err);
-        res.sendStatus(404);
+        console.log("JWT token is expired");
+        res.sendStatus(401);
         return;
     }
 
-    res.sendStatus(200);
     return;
 }
 

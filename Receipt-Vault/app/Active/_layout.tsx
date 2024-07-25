@@ -4,13 +4,13 @@ import { Tabs } from 'expo-router';
 export default function ActiveLayout() {
     return (
 
-        <Tabs initialRouteName="dashboard" screenOptions={{headerShown: true, tabBarActiveTintColor: 'green', headerTintColor: 'green'}}>
+        <Tabs initialRouteName="Dashboard" screenOptions={{headerShown: true, tabBarActiveTintColor: 'green', headerTintColor: 'green'}}>
             <Tabs.Screen
                 options={{
                     headerShown: false,
                     title: 'Dashboard'
                 }}
-                name="dashboard"
+                name="Dashboard"
             />
 
             <Tabs.Screen
