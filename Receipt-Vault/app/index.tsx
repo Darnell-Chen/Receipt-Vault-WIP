@@ -9,8 +9,17 @@ import * as SecureStore from 'expo-secure-store';
 
 function Index() {
 
-  return (<Redirect href="/Active"/>)
+  // checks if the user has a token to login with
+  const loggedIn = async () => {
+    let token = await SecureStore.getItemAsync('token');
+    if (token) {
+      return (<Redirect href="/Active"/>)
+    }
+  }
 
+  loggedIn();
+
+  // this is the state of warning messages that might appear if user is missing something
   const [loginMsg, setLoginMsg] = useState<string | null>(null);
 
   const loginFunction = async (value: object) => {

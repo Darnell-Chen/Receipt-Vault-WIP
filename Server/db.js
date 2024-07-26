@@ -48,6 +48,9 @@ const createTables = async () => {
             lastname VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
+            monthly DECIMAL(20, 2) NOT NULL,
+            yearly DECIMAL(20, 2) NOT NULL,
+            all_time DECIMAL(20, 2) NOT NULL,
             PRIMARY KEY (uuid)
         );
         `;

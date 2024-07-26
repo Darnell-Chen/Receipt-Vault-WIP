@@ -1,16 +1,20 @@
 import { router } from "expo-router";
 import { SafeAreaView, StyleSheet, Text, View, Image } from "react-native";
+import { useContext, useEffect } from "react";
 import * as SecureStore from 'expo-secure-store';
 import colors from '@globals/colors';
+import { SharedContext } from "@components/active_components/sharedContext";
+import RecentReceipts from "@components/dashboard_components/RecentReceipts";
 
 function Dashboard() {
+    const data = useContext(SharedContext);
+
     const fetchData = async() => {
         let token = await SecureStore.getItemAsync('token');
         if (!token) {
-            alert('No values stored under that key');
+            alert("login session has expired.");
+            router.push("/");
         }
-
-        console.log(token);
     
         const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/getData`, {
             method: 'GET',
@@ -19,10 +23,22 @@ function Dashboard() {
             }
         })
 
-        console.log(result.status);
+        if (!result.ok) {
+            await SecureStore.setItemAsync("token", "");
+            console.log("fetching result was NOT OKAY");
+            alert("login session has expired.");
+            router.push("/")
+        }
+
+        const jsonResult = await result.json();
+        console.log(jsonResult); 
+
+        data.setUserData(jsonResult);
     }
 
-    fetchData();
+    useEffect(() => {
+        fetchData();
+    }, [])
 
     return(
         <View style={{height: '100%'}}>
@@ -44,7 +60,8 @@ function Dashboard() {
             </View>
 
             <View style={styles.bottomView}>
-                <Text>Hello World</Text>
+                <Text style={styles.bottomTitle}>Recent Receipts:</Text>
+                <RecentReceipts userData={data.userData}/>
             </View>
 
             <View style={styles.centerConsole}>
@@ -115,6 +132,12 @@ const styles = StyleSheet.create({
         width: '25%',
         aspectRatio: 1,
         borderRadius: 1000
+    },
+    bottomTitle: {
+        fontSize: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: colors.color1
     }
 })
 

@@ -3,10 +3,14 @@ import { router } from "expo-router";
 
 
 function Settings(){
+    const logOut = () => {
+        router.navigate("/");
+    }
+
     return (
         <SafeAreaView>
             <Text>Settings</Text>
-            <Button title="Logout"/>
+            <Button onPress={logOut} title="Logout"/>
         </SafeAreaView>
     )
 }

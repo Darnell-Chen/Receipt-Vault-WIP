@@ -36,11 +36,11 @@ const registerUser = async (req) => {
 
     const hashedPW = await bcrypt.hash(password, 10);
 
-    const createUser = `INSERT into accounts (uuid, firstname, lastname, email, password)
-                        VALUES (?, ?, ?, ?, ?)`
+    const createUser = `INSERT into accounts (uuid, firstname, lastname, email, password, monthly, yearly, all_time)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     
     try {
-        const [rows, fields] = await conn.execute(createUser, [uuid, fname, lname, email, hashedPW]);
+        const [rows, fields] = await conn.execute(createUser, [uuid, fname, lname, email, hashedPW, 0, 0, 0]);
     } catch (e){
         console.log(e);
         return false;

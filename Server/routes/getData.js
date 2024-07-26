@@ -9,29 +9,55 @@ let pool;
 const getUserInfo = async (req) => {
     const userInfoPrompt = `
     SELECT * FROM accounts
-    WHERE email = ${req.user}
+    WHERE email='${req.user}'
     `
 
     const [rows, fields] = await pool.query(userInfoPrompt);
-    console.log(rows);
+
+    if (rows.length !== 1) {
+        throw "no account found, or too many found while fetching user data"
+    } else {
+        delete rows[0].password;
+        req.uuid = rows[0].uuid;
+        return rows;
+    }
 }
 
 const getUserReceipts = async (req) => {
+
+    console.log(req.uuid);
+
     const userInfoPrompt = `
     SELECT * FROM receipts
-    WHERE email = ${req.user}
+    WHERE buyer = '${req.uuid}'
     `
 
     const [rows, fields] = await pool.query(userInfoPrompt);
-    console.log(rows);
+
+    return rows;
 }
 
 route.get("/getData", verifyToken, async function(req, res) {
     pool = await connectToPool();
 
-    getUserInfo(req);
+    let data;
 
-    res.sendStatus(200);
+    try {
+        const userInfo = await getUserInfo(req);
+        const userReceipts = await getUserReceipts(req);
+
+        data = {
+            userInfo: userInfo,
+            userReceipts: userReceipts
+        }
+
+        res.json(data).status(200);
+    } catch (e) {
+        console.log("error fetching data");
+        console.log(e);
+        res.sendStatus(404);
+    }
+
     return;
 })
 

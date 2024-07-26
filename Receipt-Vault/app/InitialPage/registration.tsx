@@ -3,11 +3,18 @@ import { SafeAreaView, Text, TextInput, StyleSheet, Button, View, Pressable,
  } from "react-native";
 import { Formik } from "formik";
 import { registrationSchema } from "./validation";
+import { useState } from "react";
 
 
 function registrationPage() {
 
-    const registerUser = async(value: Object) => {
+    const [warnMSG, setWarnMSG] = useState<String | null>(null);
+    const [successMSG, setSuccessMSG] = useState<String | null>(null);
+
+    const registerUser = async(value: Object, actions: any) => {
+
+        setWarnMSG(null);
+        setSuccessMSG(null);
 
         const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/register`, {
             method: 'POST',
@@ -17,7 +24,12 @@ function registrationPage() {
             body: JSON.stringify(value)
         })
 
-        console.log(result.status);
+        if (result.ok) {
+            actions.resetForm();
+            setSuccessMSG("Account has been created")
+        } else {
+            setWarnMSG("error while trying to create account");
+        }
     }
 
     
@@ -36,8 +48,12 @@ function registrationPage() {
                         onSubmit={(values, actions) => {
                             // actions.resetForm();
                             console.log("successfully passed validation");
-                            registerUser(values);
 
+                            try {
+                                registerUser(values, actions)
+                            } catch (e) {
+                                setWarnMSG("error while trying to create account");
+                            }
                         }}>
 
                         {(props) => (
@@ -83,6 +99,13 @@ function registrationPage() {
                                 <Text style={styles.errorText}> {props.touched.confirmPassword && props.errors.confirmPassword } </Text>
                                 
 
+                                <Text style={styles.errorText}>
+                                    {(warnMSG ? warnMSG : null)}
+                                </Text>
+                                <Text style={styles.successText}>
+                                    {(successMSG ? successMSG : null)}
+                                </Text>
+
                                 <Pressable style={{backgroundColor: 'green', marginHorizontal: '25%', marginTop: '5%', bottom: '0%'}}>
                                     <Button onPress={() => props.handleSubmit()} color="white" title="Register" />
                                 </Pressable>
@@ -120,7 +143,12 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         fontSize: 15,
-    }
+    },
+    successText: {
+        color: 'green',
+        fontSize: 15,
+    },
+
 })
 
 export default registrationPage;
