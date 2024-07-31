@@ -1,12 +1,20 @@
-import {Text, SafeAreaView, Button, FlatList, View, StyleSheet} from "react-native";
+import {Text, SafeAreaView, Button, FlatList, View, StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform} from "react-native";
 import { router } from "expo-router";
 import colors from '@globals/colors';
 import ImagePickerButton from "../../components/receipt_components/imagePicker";
+import { SharedContext } from "@components/active_components/sharedContext";
+import { useContext, useState } from "react";
+import ManualForm from "@components/receipt_components/FormComp/ManualForm";
 
 
 function Receipts(){
+    const [formState, setFormState] = useState<boolean>(false)
+    const data = useContext(SharedContext);
+
     return (
-        <>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{height: '100%'}}>
+
         <View style={{backgroundColor: colors.color1, borderRadius: 30, display: 'flex', justifyContent: 'flex-end'}}>
             <SafeAreaView>
             <Text style={styles.title}>The Receipt Vault</Text>
@@ -17,10 +25,9 @@ function Receipts(){
 
             <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <View style={styles.buttons}>
-                    <Button color="white" title="Scan Receipt"/>
+                    <Button color="white" onPress={() => {setFormState(!formState)}} title="Enter Manual Bill"/>
                 </View>
                 <View style={styles.buttons}>
-                    {/* <Button color="white" title="Enter Manual Bill"/> */}
                     <ImagePickerButton/>
                 </View>
             </View>
@@ -30,7 +37,11 @@ function Receipts(){
             </Text>
 
         </View>
-        </>
+        
+        <ManualForm/>
+        
+        </View>
+        </TouchableWithoutFeedback>
     )
 }
 

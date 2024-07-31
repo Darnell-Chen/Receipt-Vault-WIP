@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { SharedProvider } from '@components/active_components/sharedContext';
 
 
+
 export default function ActiveLayout() {
     return (
         <SharedProvider>
@@ -20,6 +21,7 @@ export default function ActiveLayout() {
                         headerShown: false
                     }}
                 />
+
 
                 <Tabs.Screen
                     name="Settings"

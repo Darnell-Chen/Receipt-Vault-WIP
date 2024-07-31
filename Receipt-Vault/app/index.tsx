@@ -9,6 +9,8 @@ import * as SecureStore from 'expo-secure-store';
 
 function Index() {
 
+  return <Redirect href="/Active" />;
+
   // checks if the user has a token to login with
   const loggedIn = async () => {
     let token = await SecureStore.getItemAsync('token');

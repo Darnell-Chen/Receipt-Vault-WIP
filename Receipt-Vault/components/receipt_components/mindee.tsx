@@ -1,4 +1,7 @@
 interface Receipt {
+  date: {
+    value: string | Date;
+  };
   supplier_name: {
     value: string;
   };
@@ -12,12 +15,12 @@ interface Receipt {
 }
 
 function parseReceipt(prediction: Receipt) {
-  const store = prediction.supplier_name;
 
   const newObject = {
     store: prediction.supplier_name.value,
     total: prediction.total_amount.value,
-    items: prediction.line_items
+    items: prediction.line_items,
+    date: prediction.date.value
   }
 
   console.log(newObject);
@@ -46,6 +49,11 @@ export default async function getReceiptInfo(base64: string) {
 
   const prediction = jsonResult.document.inference.prediction
 
-  parseReceipt(prediction);
+  try {
+    parseReceipt(prediction);
+  } catch {
+    alert("Receipt couldn't be read clearly");
+    console.log("attempted prediction: " + prediction);
+  }
 
 }
