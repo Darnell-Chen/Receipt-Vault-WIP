@@ -2,23 +2,23 @@ import * as Yup from 'yup';
 
 const formSchema = Yup.object().shape({
     store: Yup.string()
-      .max(50, 'Too Long!')
-      .required('Required'),
+      .max(50, 'too long')
+      .required('required'),
     total: Yup.string()
       .min(1)
-      .required('Required')
+      .required('required')
       .test(
         'is-number',
-        'make sure total is a positive number',
+        'make sure total is a number greater than or equal to 0',
         (value) => /^([0-9]*[.])?[0-9]+$/.test(value)
       )
       .test(
         'decimal-test',
-        'please enter to 2 decimal places',
-        (value) => /^\d+(\.\d{2})?$/.test(value)
+        'please round to 2 decimal places',
+        (value) => /^\d+(\.\d?\d?)?$/.test(value)
       ),
 
-    description: Yup.string().max(100).required('Required'),
+    description: Yup.string().max(100).required('required'),
 });
 
 export default formSchema;

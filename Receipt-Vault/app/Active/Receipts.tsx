@@ -15,7 +15,7 @@ function Receipts(){
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{height: '100%'}}>
 
-        <View style={{backgroundColor: colors.color1, borderRadius: 30, display: 'flex', justifyContent: 'flex-end'}}>
+        <View style={{backgroundColor: colors.color1, borderBottomLeftRadius: 30, borderBottomRightRadius: 30, display: 'flex', justifyContent: 'flex-end'}}>
             <SafeAreaView>
             <Text style={styles.title}>The Receipt Vault</Text>
             </SafeAreaView>

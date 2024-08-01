@@ -1,37 +1,37 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { Formik, FieldArray, FieldArrayRenderProps } from 'formik';
+import { Formik } from 'formik';
 import { ScrollView } from 'react-native-gesture-handler';
 import formSchema from './formSchema';
+import colors from '@globals/colors';
+import postData from './postForm';
+
 
 
 const ManualForm = () => {
   // ref
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  // callbacks
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
 
   // renders
   return (
       <BottomSheet
         ref={bottomSheetRef}
-        onChange={handleSheetChanges}
-        snapPoints={['60%', '75%', '85%']}>
+        snapPoints={['10%', '35%','45%', '60%', '75%', '89%']}>
           <KeyboardAvoidingView 
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.keyboardContainer}>
           <ScrollView style={{marginHorizontal: '5%'}}>
             <Formik
               initialValues={{ store: '', total: '', description: ''}}
-              onSubmit={values => console.log(values)}
+              onSubmit={values => postData(values)}
               validationSchema={formSchema}
             >
               {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                 <View>
+                  <Text style={styles.title}>Manual Input Form</Text>
+
                   <TextInput
                     style={styles.textInput}
                     onChangeText={handleChange('store')}
@@ -41,13 +41,12 @@ const ManualForm = () => {
                   />
                   {errors.store && touched.store ? (<Text style={styles.errorText}>{errors.store}</Text>) : null}
 
-
                   <TextInput
                     style={styles.textInput}
                     onChangeText={handleChange('description')}
                     onBlur={handleBlur('description')}
                     value={values.description}
-                    placeholder='Discription [max 100 characters] (required)'
+                    placeholder='Discription [max 100 characters]'
                   />
                   {errors.description && touched.description ? (<Text style={styles.errorText}>{errors.description}</Text>) : null}
 
@@ -61,7 +60,9 @@ const ManualForm = () => {
                   />
                   {errors.total && touched.total ? (<Text style={styles.errorText}>{errors.total}</Text>) : null}
 
-                  <Button onPress={() => handleSubmit} title="Submit" />
+                  <View style={styles.submitButton}>
+                    <Button color="white" onPress={() => handleSubmit} title="Submit" />
+                  </View>
                 </View>
               )}
             </Formik>
@@ -88,7 +89,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     padding: 5,
     fontSize: 20,
-    marginVertical: 5
+    marginVertical: 5,
+    borderRadius: 20,
+    paddingHorizontal: 10
   },
   keyboardContainer: {
     flex: 1
@@ -96,6 +99,19 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 15
+  },
+  submitButton: {
+    backgroundColor: colors.color1,
+    marginHorizontal: 10,
+    borderRadius: 10,
+    marginTop: 5
+  },
+  title: {
+    color: colors.color2,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10
   }
 });
 
