@@ -4,6 +4,7 @@ const cors = require('cors');
 const register = require("./routes/register");
 const login = require("./routes/login");
 const getData = require("./routes/getData");
+const addReceipt = require("./routes/addReceipt");
 
 const app = express();
 const port = 3001;
@@ -35,3 +36,4 @@ startPool();
 app.use(register);
 app.use(login);
 app.use(getData);
+app.use(addReceipt);

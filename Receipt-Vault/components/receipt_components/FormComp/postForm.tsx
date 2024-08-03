@@ -13,9 +13,9 @@ type mindee = {
     date: Date | string;
 }
 
-const postData = async (values: manual | mindee) => {
+const postData = async (values: manual | mindee, uuid: string, type: string) => {
 
-    let receiptType = typeof values;
+    let receiptType = type;
     let token = "Bearer ";
     try {
       const storedToken = await SecureStore.getItemAsync('token');
@@ -28,11 +28,13 @@ const postData = async (values: manual | mindee) => {
     }
 
     const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/postReceipt`, {
+      method: 'POST',
       headers: {
-        method: 'POST',
         authorization: token,
         'Content-Type': 'application/json',
-        'Receipt-Type': receiptType
+        'Receipt-Type': receiptType,
+        'uuid': uuid,
+        'dataType': receiptType, 
       },
       body: JSON.stringify(values)
     })
