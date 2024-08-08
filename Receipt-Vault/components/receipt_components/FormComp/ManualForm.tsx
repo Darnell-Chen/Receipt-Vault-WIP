@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef } from 'react';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Button, TextInput, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Formik } from 'formik';
@@ -7,40 +7,40 @@ import formSchema from './formSchema';
 import colors from '@globals/colors';
 import postData from './postForm';
 import { SharedContext } from '@components/active_components/sharedContext';
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
 const ManualForm = () => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const contextData = useContext(SharedContext);
-  let uuid = "";
-  
-  uuid = contextData.userData.userInfo[0].uuid;
-
-  // the documentation has this, and it takes value: 
-  // React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES[keyof React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES]) ???
+  // the documentation has this, and it takes value: React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES[keyof React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES]) ???
   // so just dont use it I guess
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  const confirmDate = (date: Date, setFieldValue: any) => {
+    setFieldValue('date', date);
+    setDatePickerVisibility(!isDatePickerVisible);
+  }
 
-  // renders
+
   return (
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['10%', '35%','45%', '60%', '75%', '89%']}>
+        snapPoints={['75%', '89%']}>
           <KeyboardAvoidingView 
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.keyboardContainer}>
           <ScrollView style={{marginHorizontal: '5%'}}>
             <Formik
-              initialValues={{ store: '', total: '', description: ''}}
+              initialValues={{ store: '', total: '', description: '', date: (new Date)}}
               onSubmit={(values, actions) => {
                 console.log(values);
-                postData(values, uuid, "manual")
+                postData(values, "manual");
+                actions.resetForm();
               }}
               validationSchema={formSchema}
             >
-              {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+              {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
                 <View>
                   <Text style={styles.title}>Manual Input Form</Text>
 
@@ -53,6 +53,21 @@ const ManualForm = () => {
                   />
                   {errors.store && touched.store ? (<Text style={styles.errorText}>{errors.store}</Text>) : null}
 
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={(date) => confirmDate(date, setFieldValue)}
+                    onCancel={() => setDatePickerVisibility(!isDatePickerVisible)}
+                  />
+
+                  <TextInput
+                      style={styles.textInput}
+                      onPress={() => setDatePickerVisibility(!isDatePickerVisible)}
+                      value = {values.date.toLocaleDateString("en-US")}
+                      placeholder='Date'
+                      editable = {false}
+                  />
+                  
                   <TextInput
                     style={styles.textInput}
                     onChangeText={handleChange('description')}

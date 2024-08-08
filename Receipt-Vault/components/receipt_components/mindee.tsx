@@ -1,6 +1,8 @@
+import postData from "./FormComp/postForm";
+
 interface Receipt {
   date: {
-    value: string | Date;
+    value: string;
   };
   supplier_name: {
     value: string;
@@ -8,6 +10,12 @@ interface Receipt {
   line_items: {
     description: string;
     total_amount: number;
+    polygon: any;
+    confidence: any;
+    page_id: any;
+    quantity: any;
+    unit_price: any;
+
   }[];
   total_amount: {
     value: number;
@@ -20,10 +28,20 @@ function parseReceipt(prediction: Receipt) {
     store: prediction.supplier_name.value,
     total: prediction.total_amount.value,
     items: prediction.line_items,
-    date: prediction.date.value
+    date: new Date(prediction.date.value)
   }
 
-  console.log(newObject);
+  for (let i = 0; i < newObject.items.length; i++) {
+    delete newObject.items[i].polygon;
+    delete newObject.items[i].quantity;
+    delete newObject.items[i].page_id;
+    delete newObject.items[i].unit_price;
+    delete newObject.items[i].confidence;
+  }
+
+  console.log("from stringify: " + JSON.stringify(newObject, null, 2));
+
+  postData(newObject, "mindee");
 
   return newObject;
 }
@@ -50,8 +68,9 @@ export default async function getReceiptInfo(base64: string) {
   const prediction = jsonResult.document.inference.prediction
 
   try {
+    console.log("pre-parse prediction \n" + prediction)
     parseReceipt(prediction);
-  } catch {
+  } catch (e) {
     alert("Receipt couldn't be read clearly");
     console.log("attempted prediction: " + prediction);
   }

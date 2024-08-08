@@ -62,14 +62,34 @@ const createTables = async () => {
             total DECIMAL(20, 2) NOT NULL,
             buyer CHAR(36) NOT NULL,
             type VARCHAR(6) NOT NULL,
-            receipt_ts DATE NOT NULL,
-            created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            receipt_date DATE NOT NULL,
             PRIMARY KEY (receiptID),
             FOREIGN KEY (buyer) REFERENCES accounts(uuid)
         );`
 
+        const resetMonthly = `
+            CREATE EVENT IF NOT EXISTS resetMonthly
+            ON SCHEDULE EVERY 1 MONTH
+            STARTS ?
+            DO
+            UPDATE accounts
+            SET monthly = ?
+        `;
+
+        const resetYearly = `
+            CREATE EVENT IF NOT EXISTS resetYearly
+            ON SCHEDULE EVERY 1 YEAR
+            STARTS ?
+            DO
+            UPDATE accounts
+            SET yearly = ?
+        `;
+
         const [accountRows, accountFields] = await pool.query(makeAccountsTBL);
         const [receiptRows, receiptFields] = await pool.query(makeReceiptsTBL);
+
+        const [mRows, mFields] = await pool.query(resetMonthly, ['2024-01-01 00:00:01', 0]);
+        const [yRows, yFields] = await pool.query(resetYearly, ['2024-01-01 00:00:01', 0]);
 
         console.log('DB ready');
 

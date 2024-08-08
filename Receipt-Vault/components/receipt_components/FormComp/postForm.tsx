@@ -1,43 +1,49 @@
 import * as SecureStore from 'expo-secure-store';
+import { useContext } from 'react';
+import { SharedContext } from '@components/active_components/sharedContext';
 
 type manual = {
-    store: string;
-    total: string;
-    description: string;
-  }
-
-type mindee = {
-    store: string;
-    total: string | number;
-    items: string[] | number[] | JSON[];
-    date: Date | string;
+  date: Date;
+  store: string;
+  description: string;
+  total: string;
 }
 
-const postData = async (values: manual | mindee, uuid: string, type: string) => {
+interface mindee {
+  date: Date;
+  store: string;
+  items: {
+    description: string;
+    total_amount: number;
+  }[];
+  total: number;
+}
 
-    let receiptType = type;
-    let token = "Bearer ";
-    try {
-      const storedToken = await SecureStore.getItemAsync('token');
-      token = token + storedToken;
+const postData = async (values: manual | mindee, type: string) => {
 
-    } catch (e) {
-      console.log("problem fetching token");
-      alert("Problem fetching user auth token");
-      return;
-    }
+  let receiptType = type;
+  let token = "Bearer ";
+  try {
+    const storedToken = await SecureStore.getItemAsync('token');
+    token = token + storedToken;
 
-    const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/postReceipt`, {
-      method: 'POST',
-      headers: {
-        authorization: token,
-        'Content-Type': 'application/json',
-        'Receipt-Type': receiptType,
-        'uuid': uuid,
-        'dataType': receiptType, 
-      },
-      body: JSON.stringify(values)
-    })
+  } catch (e) {
+    console.log("problem fetching token");
+    alert("Problem fetching user auth token");
+    return;
   }
 
-  export default postData;
+  const result = await fetch(`${process.env.EXPO_PUBLIC_FETCH_URL}:3001/postReceipt`, {
+    method: 'POST',
+    headers: {
+      authorization: token,
+      'Content-Type': 'application/json',
+      'Receipt-Type': receiptType,
+    },
+    body: JSON.stringify(values)
+  })
+
+  console.log(result.status);
+}
+
+export default postData;

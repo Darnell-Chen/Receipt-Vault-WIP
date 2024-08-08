@@ -31,7 +31,7 @@ function Dashboard() {
         }
 
         const jsonResult = await result.json();
-        console.log(jsonResult); 
+        console.log(jsonResult);
 
         data.setUserData(jsonResult);
     }
