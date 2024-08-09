@@ -1,6 +1,6 @@
 import { router } from "expo-router";
-import { SafeAreaView, StyleSheet, Text, View, Image } from "react-native";
-import { useContext, useEffect } from "react";
+import { SafeAreaView, StyleSheet, Text, View, Image, Button, TouchableOpacity } from "react-native";
+import { useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import colors from '@globals/colors';
 import { SharedContext } from "@components/active_components/sharedContext";
@@ -8,6 +8,12 @@ import RecentReceipts from "@components/dashboard_components/RecentReceipts";
 
 function Dashboard() {
     const data = useContext(SharedContext);
+    let userInfo = data.userData.userInfo;
+    (userInfo ? (userInfo = userInfo[0]) : null);
+    const userReceipts = data.userData.userReceipts;
+
+    // center console
+    const [consoleState, setConsole] = useState([true, false, false]);
 
     const fetchData = async() => {
         let token = await SecureStore.getItemAsync('token');
@@ -27,7 +33,7 @@ function Dashboard() {
             await SecureStore.setItemAsync("token", "");
             console.log("fetching result was NOT OKAY");
             alert("login session has expired.");
-            router.push("/")
+            router.push("/");
         }
 
         const jsonResult = await result.json();
@@ -51,7 +57,7 @@ function Dashboard() {
                             <Text style={styles.welcomeText}> 
                                 &nbsp; &nbsp; Welcome to your Vault!
                                 {"\n"}
-                                <Text style={styles.secondaryText}> &nbsp; &nbsp; User: Darnell Chen</Text>
+                                <Text style={styles.secondaryText}> &nbsp; &nbsp; User: {(userInfo) ? (`${userInfo.firstname} ${userInfo.lastname}`) : null}</Text>
                             </Text>
                         </View>
                     </View>
@@ -68,12 +74,31 @@ function Dashboard() {
                 <Text style={styles.centerText}> 
                     You have spent:
                     {"\n"}
-                    <Text style={{fontSize: 85, fontWeight: '900'}}>
-                        $100
+                    <Text style={{fontSize: 70, fontWeight: '900'}}>
+                        {(userInfo) ? `$${userInfo.all_time}` : "0"}
                     </Text>
-                    {"\n"}
-                    this month.
                 </Text>
+
+                <View style={{display: 'flex', flexDirection: 'row', width: '100%', columnGap: 1}}>
+                    <TouchableOpacity style={(consoleState[0] ? styles.selectedOpacity : styles.notSelectedOpacity)}>
+                        <Text style={(consoleState[0] ? styles.selected : styles.notSelected)}>
+                            Month
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={(consoleState[1] ? styles.selectedOpacity : styles.notSelectedOpacity)}>
+                        <Text style={(consoleState[1] ? styles.selected : styles.notSelected)}>
+                            Year
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={(consoleState[2] ? styles.selectedOpacity : styles.notSelectedOpacity)}>
+                        <Text style={(consoleState[2] ? styles.selected : styles.notSelected)}>
+                            All Time
+                        </Text>
+                    </TouchableOpacity>
+
+                </View>
             </View>
         </View>
     )
@@ -118,6 +143,33 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         fontWeight: '600'
+    },
+    selected: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 500,
+        backgroundColor: 'transparent',
+        borderRadius: 5,
+    },
+    notSelected: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 500,
+    },
+    selectedOpacity: {
+        borderRadius: 5,
+        minHeight: '20%',
+        justifyContent: 'center',
+        alignContent: 'center',
+        flex: 1,
+        backgroundColor: colors.color1
+    },
+    notSelectedOpacity: {
+        borderRadius: 5,
+        minHeight: '20%',
+        justifyContent: 'center',
+        alignContent: 'center',
+        flex: 1
     },
     welcomeText: {
         color: 'white',

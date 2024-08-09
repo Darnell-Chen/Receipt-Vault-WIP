@@ -88,10 +88,6 @@ route.post("/postReceipt", verifyToken, getUUID, async (req, res) => {
         res.sendStatus(400);
         return;
     }
-
-    console.log("reached");
-    res.sendStatus(200);
-    return;
 })
 
 module.exports = route;

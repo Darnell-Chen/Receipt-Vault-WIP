@@ -28,6 +28,7 @@ function Receipts(){
                     <Button color="white" onPress={() => {setFormState(!formState)}} title="Enter Manual Bill"/>
                 </View>
                 <View style={styles.buttons}>
+                    {/**JUST THE MINDEE BUTTON TO OPEN CAMERA FOR OCR RECEIPT SCANNER**/}
                     <ImagePickerButton/>
                 </View>
             </View>
@@ -38,7 +39,7 @@ function Receipts(){
 
         </View>
         
-        <ManualForm/>
+        {(formState) ? <ManualForm setFormState={setFormState} formState={formState}/> : null}
         
         </View>
         </TouchableWithoutFeedback>

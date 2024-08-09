@@ -9,12 +9,16 @@ import postData from './postForm';
 import { SharedContext } from '@components/active_components/sharedContext';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+interface manualFormProps {
+  setFormState: React.Dispatch<React.SetStateAction<boolean>>;
+  formState: boolean;
+}
 
-const ManualForm = () => {
+const ManualForm = (props: manualFormProps) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  // the documentation has this, and it takes value: React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES[keyof React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES]) ???
-  // so just dont use it I guess
+  // this is the reference for the bottomsheet - use bottomsheet.ref.* to access its methods
+  // https://ui.gorhom.dev/components/bottom-sheet/methods/
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const confirmDate = (date: Date, setFieldValue: any) => {
@@ -26,6 +30,8 @@ const ManualForm = () => {
   return (
       <BottomSheet
         ref={bottomSheetRef}
+        enablePanDownToClose={true}
+        onClose={() => {props.setFormState(!props.formState)}}
         snapPoints={['75%', '89%']}>
           <KeyboardAvoidingView 
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -37,6 +43,7 @@ const ManualForm = () => {
                 console.log(values);
                 postData(values, "manual");
                 actions.resetForm();
+                props.setFormState(!props.formState);
               }}
               validationSchema={formSchema}
             >
@@ -90,6 +97,11 @@ const ManualForm = () => {
                   <View style={styles.submitButton}>
                     <Button color="white" onPress={() => handleSubmit()} title="Store Bill" />
                   </View>
+
+                  <View style={styles.cancelButton}>
+                    <Button color="white" onPress={() => {bottomSheetRef!.current!.close()}} title="Cancel" />
+                  </View>
+
                 </View>
               )}
             </Formik>
@@ -131,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.color1,
     marginHorizontal: 10,
     borderRadius: 10,
-    marginTop: 5
+    marginTop: 15
   },
   title: {
     color: colors.color2,
@@ -139,6 +151,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10
+  },
+  cancelButton: {
+    backgroundColor: colors.semilightgray,
+    marginHorizontal: 10,
+    borderRadius: 10,
+    marginTop: 5
   }
 });
 
