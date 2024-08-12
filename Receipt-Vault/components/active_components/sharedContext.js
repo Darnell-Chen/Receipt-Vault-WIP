@@ -6,7 +6,7 @@ import React, { createContext, useState } from 'react';
 export const SharedContext = createContext();
 
 export const SharedProvider = ({children}) => {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({userInfo: null, userReceipts: []});
 
   return (
     <SharedContext.Provider value={{ userData, setUserData }}>

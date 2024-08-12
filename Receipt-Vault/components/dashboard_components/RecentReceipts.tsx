@@ -1,20 +1,42 @@
 import { Text } from "react-native"
 import { useState } from "react";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import EmptyList from "./EmptyList";
 import FilledList from "./FilledList";
 
-export default function RecentReceipts(props: any) {
+interface recentReceiptsProps {
+    userData: {
+        userInfo: null | [];
+        userReceipts: [];
+    };
+}
 
-    console.log("From Recent Receipts Component: " + props.userData);
+export default function RecentReceipts(props: recentReceiptsProps) {
 
-    if (!props.userData.userInfo || props.userData.userInfo.length == 0) {
+    console.log("From Recent Receipts Component: " + JSON.stringify(props.userData));
+
+    if (props.userData.userReceipts.length == 0) {
         return (
-            <EmptyList/>
+            <SafeAreaView style={styles.wrapperView}>
+                <EmptyList/>
+            </SafeAreaView>
         )
     } else {
         console.log("In Recent Receipts: " + props.userData.userInfo);
         return (
-            <FilledList data={props.userData}/>
+            <SafeAreaView style={styles.wrapperView}>
+            <FilledList userReceipts={props.userData.userReceipts}/>
+            </SafeAreaView>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    wrapperView: {
+        height: '65%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '3%'
+    }
+})

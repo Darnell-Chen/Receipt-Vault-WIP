@@ -14,6 +14,7 @@ function Dashboard() {
 
     // center console
     const [consoleState, setConsole] = useState([true, false, false]);
+    const [consoleValue, setValue] = useState<null | number>(null);
 
     const fetchData = async() => {
         let token = await SecureStore.getItemAsync('token');
@@ -40,6 +41,7 @@ function Dashboard() {
         console.log(jsonResult);
 
         data.setUserData(jsonResult);
+        (consoleValue == null) ? (setValue(jsonResult.userInfo[0].all_time)) : null;
     }
 
     useEffect(() => {
@@ -75,24 +77,30 @@ function Dashboard() {
                     You have spent:
                     {"\n"}
                     <Text style={{fontSize: 70, fontWeight: '900'}}>
-                        {(userInfo) ? `$${userInfo.all_time}` : "0"}
+                        {(userInfo) ? ((consoleState[0]) ? `$${userInfo.monthly}` : (consoleState[1] ? `$${userInfo.yearly}` : `$${userInfo.all_time}`)) : "0"}
                     </Text>
                 </Text>
 
                 <View style={{display: 'flex', flexDirection: 'row', width: '100%', columnGap: 1}}>
-                    <TouchableOpacity style={(consoleState[0] ? styles.selectedOpacity : styles.notSelectedOpacity)}>
+                    <TouchableOpacity 
+                    style={(consoleState[0] ? styles.selectedOpacity : styles.notSelectedOpacity)}
+                    onPress={() => {setConsole([true, false, false])}}>
                         <Text style={(consoleState[0] ? styles.selected : styles.notSelected)}>
                             Month
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={(consoleState[1] ? styles.selectedOpacity : styles.notSelectedOpacity)}>
+                    <TouchableOpacity 
+                    style={(consoleState[1] ? styles.selectedOpacity : styles.notSelectedOpacity)} 
+                    onPress={() => {setConsole([false, true, false])}}>
                         <Text style={(consoleState[1] ? styles.selected : styles.notSelected)}>
                             Year
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={(consoleState[2] ? styles.selectedOpacity : styles.notSelectedOpacity)}>
+                    <TouchableOpacity 
+                    style={(consoleState[2] ? styles.selectedOpacity : styles.notSelectedOpacity)} 
+                    onPress={() => {setConsole([false, false, true])}}>
                         <Text style={(consoleState[2] ? styles.selected : styles.notSelected)}>
                             All Time
                         </Text>
@@ -150,6 +158,7 @@ const styles = StyleSheet.create({
         fontWeight: 500,
         backgroundColor: 'transparent',
         borderRadius: 5,
+        color: 'white'
     },
     notSelected: {
         fontSize: 20,
