@@ -70,7 +70,7 @@ Then simply follow the instructions provided in Terminal by Expo
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contact Me
-[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)][https://www.linkedin.com/in/darnell-chen/]
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/darnell-chen/)
 
 ## Resources
 
