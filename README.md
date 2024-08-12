@@ -58,11 +58,11 @@ Before cloning the repo, there are a few pre-requisites:
    ```
 5. Open another terminal and run the following command in `./Server` to run the server:
    ```sh
-  node index
+     node index
    ```
 6. Open a terminal and run the following command in `./Receipt_Vault` to run Expo:
    ```sh
-  npx expo start
+     npx expo start
    ```
 
 Then simply follow the instructions provided in Terminal by Expo
