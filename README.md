@@ -51,19 +51,19 @@ Before cloning the repo, there are a few pre-requisites:
    EXPO_PUBLIC_MINDEE_API_KEY = 'YOUR MINDEE API KEY'
    ```
 4. Configure your .env in the NodeJS (back end under `./Server`)
-```js
+   ```js
     MYSQL_PASSWORD = 'YOUR MYSQL PASSOWRD'
     
     JWT_SECRET = 'A RANDOM JWT SECRET'
-```
+   ```
 5. Open another terminal and run the following command in `./Server` to run the server:
-```sh
+   ```sh
   node index
-```
+   ```
 6. Open a terminal and run the following command in `./Receipt_Vault` to run Expo:
-```sh
+   ```sh
   npx expo start
-```
+   ```
 
 Then simply follow the instructions provided in Terminal by Expo
 
