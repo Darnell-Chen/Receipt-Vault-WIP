@@ -49,7 +49,7 @@ function Dashboard() {
     }, [])
 
     return(
-        <View style={{height: '100%'}}>
+        <View style={{height: '100%', backgroundColor: 'white'}}>
             <View style={styles.topView}>
                 <SafeAreaView style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
                     <Text style={{...styles.welcomeText, textAlign: 'center', marginBottom: '10%'}}>Dashboard</Text>
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     },
     bottomView: {
         borderRadius: 30,
-        backgroundColor: colors.lightlightgray,
         paddingTop: '25%',
         overflow: 'hidden',
         paddingHorizontal: '5%'

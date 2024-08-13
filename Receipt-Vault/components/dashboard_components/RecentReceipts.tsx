@@ -13,8 +13,7 @@ interface recentReceiptsProps {
 
 export default function RecentReceipts(props: recentReceiptsProps) {
 
-    console.log("From Recent Receipts Component: " + JSON.stringify(props.userData));
-
+    // flatlist has property ListEmptyComponent - but I won't be fixing what's not broken :)
     if (props.userData.userReceipts.length == 0) {
         return (
             <SafeAreaView style={styles.wrapperView}>
@@ -22,10 +21,10 @@ export default function RecentReceipts(props: recentReceiptsProps) {
             </SafeAreaView>
         )
     } else {
-        console.log("In Recent Receipts: " + props.userData.userInfo);
         return (
             <SafeAreaView style={styles.wrapperView}>
-            <FilledList userReceipts={props.userData.userReceipts}/>
+            <FilledList 
+            userReceipts={props.userData.userReceipts}/>
             </SafeAreaView>
         )
     }

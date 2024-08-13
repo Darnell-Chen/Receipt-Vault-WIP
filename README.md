@@ -33,9 +33,12 @@ Before cloning the repo, there are a few pre-requisites:
 - MySQL installed [Made with v8.0.38]
 - An API key from [Mindee](https://www.mindee.com/)
 
+If you plan on testing the app with Expo App, you should be connected to the same Wi-Fi network as your computer system, or whichever device you're running this project from.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### 
+
+### Installation 
 1. Clone the repo
    ```sh
    git clone https://github.com/Darnell-Chen/Receipt-Vault-WIP-
@@ -58,14 +61,15 @@ Before cloning the repo, there are a few pre-requisites:
    ```
 5. Open another terminal and run the following command in `./Server` to run the server:
    ```sh
-     node index
+   node index
    ```
 6. Open a terminal and run the following command in `./Receipt_Vault` to run Expo:
    ```sh
-     npx expo start
+   npx expo start
    ```
 
-Then simply follow the instructions provided in Terminal by Expo
+
+Once Expo starts your local server, just follow the instructions that is served in the terminal.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

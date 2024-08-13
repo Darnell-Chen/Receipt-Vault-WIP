@@ -16,7 +16,9 @@ interface receiptList {
 function FilledList(props: receiptList) {
 
     // for Dashboard, we'll only display the five most recent purchases
-    const myList = props.userReceipts.slice(props.userReceipts.length - 5, props.userReceipts.length);
+    // we're reversing so that the most recently added will be shown on top
+    let myList = props.userReceipts.slice(props.userReceipts.length - 5, props.userReceipts.length);
+    myList = myList.reverse();
 
     return (
         <SafeAreaView style={{width: '100%'}}>
@@ -26,6 +28,7 @@ function FilledList(props: receiptList) {
                 data={myList}
                 renderItem={({item}) => (<ListItem receipt={item}/>)}
                 keyExtractor={item => item.receiptID.toString()}
+                scrollEnabled={false}
             />
         </SafeAreaView>
     )
