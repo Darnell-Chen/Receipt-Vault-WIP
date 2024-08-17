@@ -12,6 +12,8 @@ It displays purchases similarly to how your banking app does:
 
 Using Mindee's Receipt OCR, users are able to capture receipts via their camera or upload with a manual input form.
 
+**Note:** Unfortunately, I wasn't able to finish the client-side updating after moving into student housing due to testing issues using their network. So for now, this project will be put on Hiatus.
+
 
 ### Built With
 
